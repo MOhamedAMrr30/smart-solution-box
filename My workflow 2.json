@@ -1,0 +1,123 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "2f999fc3-e701-40ec-918b-0a130823771c",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -384,
+        -80
+      ],
+      "id": "3ee5e444-9c93-415b-8e90-2625decbef1f",
+      "name": "Webhook",
+      "webhookId": "2f999fc3-e701-40ec-918b-0a130823771c"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=The Problem Description: {{ $json.body.description }}",
+        "options": {
+          "systemMessage": "=# Overview\nYou are an AI that generates excuses. Your task is to come up with witty, imaginative, and situation-appropriate excuses that a person could use to avoid or get out of something.\n\n## Output\n- Provide only the excuse itself  \n- Include a light sense of humor in your response\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -176,
+        -80
+      ],
+      "id": "7b26fe1e-8fba-43ee-82d4-cde55748b112",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -176,
+        64
+      ],
+      "id": "cc268938-a0c1-406e-92de-e37942ffc5c4",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "VvtpZmfycHF4gia3",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        176,
+        -80
+      ],
+      "id": "83c54063-821e-4047-b6da-4449973af6e4",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "d67fb238-ec9b-47b4-a467-d164ce3ac6a6",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9b33793ed62f604b7bade91e789126df496bb4e24519d5e4986fcc23f63cf352"
+  },
+  "id": "OUTRWU0eacTGt0x9",
+  "tags": []
+}
